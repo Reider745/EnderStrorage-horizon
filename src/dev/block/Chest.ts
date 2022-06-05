@@ -4,20 +4,38 @@
 /// <reference path="./models/chest_2.js"/>
 /// <reference path="./models/chest_3.js"/>
 
-IDRegistry.genBlockID("ender_storage_");
-Block.createBlockWithRotation("ender_storage_", [{
+IDRegistry.genBlockID("ender_storage");
+Block.createBlockWithRotation("ender_storage", [{
     name: "Ender Storage",
-    texture: [["stone", 0]],
+    texture: [
+        ["down_ender_chest", 0],
+        ["up_ender_chest", 0],
+        ["side_ender_chest", 0],
+        ["front_ender_chest", 0],
+        ["side_ender_chest", 0],
+        ["side_ender_chest", 0]
+    ],
     inCreative: true
 }]);
 Translation.addTranslation("Ender Storage", {
     ru: "Эндер сундук"
 });
 
-chest_1(null, BlockID.ender_storage_, 0).setBlockModel(BlockID.ender_storage_, 0);
-chest_0(null, BlockID.ender_storage_, 1).setBlockModel(BlockID.ender_storage_, 1);
-chest_3(null, BlockID.ender_storage_, 2).setBlockModel(BlockID.ender_storage_, 2);
-chest_2(null, BlockID.ender_storage_, 3).setBlockModel(BlockID.ender_storage_, 3);
+let DEFAULT_boxes = {"wool_1": {texture:VanillaBlockID.wool, data: 0}, "wool_2": {texture:VanillaBlockID.wool, data: 0}, "wool_3": {texture:VanillaBlockID.wool, data: 0}};
+let INSTANCE_chest_0: RenderUtil.Model = chest_0(DEFAULT_boxes, BlockID.ender_storage, 1);
+let INSTANCE_chest_1: RenderUtil.Model = chest_1(DEFAULT_boxes, BlockID.ender_storage, 0);
+let INSTANCE_chest_2: RenderUtil.Model = chest_2(DEFAULT_boxes, BlockID.ender_storage, 3);
+let INSTANCE_chest_3: RenderUtil.Model = chest_3(DEFAULT_boxes, BlockID.ender_storage, 2);
+
+BlockRenderer.setCustomCollisionAndRaycastShape(BlockID.ender_storage, 0, INSTANCE_chest_1.getCollisionShape());
+BlockRenderer.setCustomCollisionAndRaycastShape(BlockID.ender_storage, 1, INSTANCE_chest_0.getCollisionShape());
+BlockRenderer.setCustomCollisionAndRaycastShape(BlockID.ender_storage, 2, INSTANCE_chest_3.getCollisionShape());
+BlockRenderer.setCustomCollisionAndRaycastShape(BlockID.ender_storage, 3, INSTANCE_chest_2.getCollisionShape());
+
+BlockRenderer.enableCoordMapping(BlockID.ender_storage, 0, INSTANCE_chest_1.getICRenderModel());
+BlockRenderer.enableCoordMapping(BlockID.ender_storage, 1, INSTANCE_chest_0.getICRenderModel());
+BlockRenderer.enableCoordMapping(BlockID.ender_storage, 2, INSTANCE_chest_3.getICRenderModel());
+BlockRenderer.enableCoordMapping(BlockID.ender_storage, 3, INSTANCE_chest_2.getICRenderModel());
 
 let ChestUI = new UI.StandardWindow({
     standard:{
@@ -25,6 +43,9 @@ let ChestUI = new UI.StandardWindow({
             "text": {
                 "text": Translation.translate("Ender Storage")
             }
+        },
+        "background": {
+            "standard": true,
         },
         "inventory": {
             "standard":true
@@ -42,37 +63,67 @@ let ChestUI = new UI.StandardWindow({
             c++;
         }
 })(10, 10, 110);
+VanillaSlots.registerForWindow(ChestUI);
 
 class TileChest extends EnderTileBase {
-    defaultValues = {
-        wools: [0, 0, 0]
-    }
-    networkEntityType: any;
-
-    init(): void {
-        this.container = EnderTileBase.getContainerChest(this.data.wools);
-        this.container.setParent(this);
-        this.container.setClientContainerTypeName(this.networkEntityType.getTypeName());
+    getContainer(): ItemContainer {
+        return EnderTileBase.getContainerChest(this.data.wools);
     }
 
     getScreenByName(screenName: string): UI.IWindow {
         return ChestUI;
     }
 
-    tick(): void {
-        super.tick();
+    onItemUse(coords: Callback.ItemUseCoordinates, item: ItemStack, player: number): boolean {
+        let model = INSTANCE_chest_0;
+        let data = this.blockSource.getBlockData(this.x, this.y, this.z);
+        if(data == 0)
+            model = INSTANCE_chest_1;
+        else if(data == 2)
+            model = INSTANCE_chest_3
+        else if(data == 3)
+            model = INSTANCE_chest_2
+
+        let wool_1 = model.getBoxes()["wool_1"];
+        let wool_2 = model.getBoxes()["wool_2"];
+        let wool_3 = model.getBoxes()["wool_3"];
+        alert(this.blockSource.getBlockData(this.x, this.y, this.z))
+        
+
+        let pos = {x: coords.vec.x - coords.x, y: coords.vec.y - coords.y, z: coords.vec.z - coords.z};
+
+        if(RenderUtil.isClick(pos.x, pos.y, pos.z, wool_1) && item.id == VanillaBlockID.wool)
+            this.data.wools[0] = item.data;
+        else if(RenderUtil.isClick(pos.x, pos.y, pos.z, wool_2) && item.id == VanillaBlockID.wool)
+            this.data.wools[1] = item.data;
+        else if(RenderUtil.isClick(pos.x, pos.y, pos.z, wool_3) && item.id == VanillaBlockID.wool)
+            this.data.wools[2] = item.data;
+        else
+            return false;
+        this.init();
+        Game.prevent();
+        return true;
     }
 }
 
-TileEntity.registerPrototype(BlockID.ender_storage_, new TileChest());
-StorageInterface.createInterface(BlockID.ender_storage_, {
+TileEntity.registerPrototype(BlockID.ender_storage, new TileChest(new ClientTileEntity(chest_0, chest_1, chest_2, chest_3)));
+StorageInterface.createInterface(BlockID.ender_storage, {
     canReceiveLiquid(liquid, obj){
         return false;
     },
     canTransportLiquid(liquid, obj){
         return false;
     },
-    "slots": {
-        "slot^0-36": {input: true, output:true}
+    getInputSlots(side: number){
+        let slots = [];
+        for(let i = 0;i < 3*9;i++)
+            slots.push("slot_"+i);
+        return slots;
+    },
+    getOutputSlots(side: number){
+        let slots = [];
+        for(let i = 0;i < 3*9;i++)
+            slots.push("slot_"+i);
+        return slots;
     }
-});
+}); 
