@@ -27,9 +27,9 @@ class ClientTileEntity {
         switch(data){
             case 0:
                 BlockRenderer.mapAtCoords(this.x, this.y, this.z, this.model_1({
-                    "wool_1": {texture:VanillaBlockID.wool, data: wool_1},
+                    "wool_3": {texture:VanillaBlockID.wool, data: wool_1},
                     "wool_2": {texture:VanillaBlockID.wool, data: wool_2},
-                    "wool_3": {texture:VanillaBlockID.wool, data: wool_3}
+                    "wool_1": {texture:VanillaBlockID.wool, data: wool_3}
                 }, id, data).getICRenderModel());
             break;
             case 1:
@@ -48,9 +48,9 @@ class ClientTileEntity {
             break;
             case 3:
                 BlockRenderer.mapAtCoords(this.x, this.y, this.z, this.model_2({
-                    "wool_3": {texture:VanillaBlockID.wool, data: wool_3},
+                    "wool_3": {texture:VanillaBlockID.wool, data: wool_1},
                     "wool_2": {texture:VanillaBlockID.wool, data: wool_2},
-                    "wool_1": {texture:VanillaBlockID.wool, data: wool_1}
+                    "wool_1": {texture:VanillaBlockID.wool, data: wool_3}
                 }, id, data).getICRenderModel());
             break;
         }

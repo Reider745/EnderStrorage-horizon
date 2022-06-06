@@ -77,27 +77,27 @@ class TileChest extends EnderTileBase {
     onItemUse(coords: Callback.ItemUseCoordinates, item: ItemStack, player: number): boolean {
         let model = INSTANCE_chest_0;
         let data = this.blockSource.getBlockData(this.x, this.y, this.z);
-        if(data == 0)
-            model = INSTANCE_chest_1;
-        else if(data == 2)
-            model = INSTANCE_chest_3
-        else if(data == 3)
-            model = INSTANCE_chest_2
+        if(this.blockSource.getBlockData(this.x, this.y, this.z) > 1)
+            model = INSTANCE_chest_2;
 
         let wool_1 = model.getBoxes()["wool_1"];
         let wool_2 = model.getBoxes()["wool_2"];
         let wool_3 = model.getBoxes()["wool_3"];
-        alert(this.blockSource.getBlockData(this.x, this.y, this.z))
-        
 
         let pos = {x: coords.vec.x - coords.x, y: coords.vec.y - coords.y, z: coords.vec.z - coords.z};
 
         if(RenderUtil.isClick(pos.x, pos.y, pos.z, wool_1) && item.id == VanillaBlockID.wool)
-            this.data.wools[0] = item.data;
+            if(data == 0 || data == 3)
+                this.data.wools[2] = item.data;
+            else
+                this.data.wools[0] = item.data;
         else if(RenderUtil.isClick(pos.x, pos.y, pos.z, wool_2) && item.id == VanillaBlockID.wool)
             this.data.wools[1] = item.data;
         else if(RenderUtil.isClick(pos.x, pos.y, pos.z, wool_3) && item.id == VanillaBlockID.wool)
-            this.data.wools[2] = item.data;
+            if(data == 0 || data == 3)
+                this.data.wools[0] = item.data;
+            else
+                this.data.wools[2] = item.data;
         else
             return false;
         this.init();
@@ -127,3 +127,8 @@ StorageInterface.createInterface(BlockID.ender_storage, {
         return slots;
     }
 }); 
+Recipes.addShaped({id: BlockID.ender_storage, count: 1, data: 0}, [
+    "aba",
+    "cdc",
+    "apa"
+], ["p", VanillaItemID.ender_pearl, 0, "b", VanillaBlockID.wool, 0, "c", VanillaBlockID.obsidian, 0, "d", VanillaBlockID.chest, 0, "a", VanillaItemID.blaze_rod, 0])
