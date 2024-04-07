@@ -51,7 +51,6 @@ class EnderTileBase extends TileEntityBase {
     }
 
     public getScreenName(player: number, coords: Callback.ItemUseCoordinates): string {
-        alert("getScreenName "+this.container.getClientContainerTypeName())
         return "main";
     }
 
