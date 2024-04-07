@@ -1,9 +1,0 @@
-header.ts
-
-models/chest_0.js
-models/chest_1.js
-models/chest_2.js
-models/chest_3.js
-
-block/TileBase.ts
-block/Chest.ts

@@ -1,0 +1,40 @@
+{
+	"compilerOptions": {
+		"outDir": "C:\\vs\\toolchainnew\\toolchain\\toolchain\\build\\EnderStorage-4b6c9\\sources",
+		"target": "es5",
+		"lib": [
+			"es5",
+			"es2015.core",
+			"es2015.generator"
+		],
+		"module": "none",
+		"skipDefaultLibCheck": true,
+		"composite": true,
+		"downlevelIteration": true,
+		"experimentalDecorators": true,
+		"noEmitOnError": true,
+		"stripInternal": true,
+		"allowJs": true
+	},
+	"compileOnSave": false,
+	"exclude": [
+		"dom",
+		"dom.iterable",
+		"es2015.iterable",
+		"scripthost",
+		"webworker",
+		"webworker.importscripts",
+		"webworker.iterable"
+	],
+	"include": [],
+	"files": [
+		"C:\\vs\\toolchainnew\\EnderStorage\\declarations\\BlockEngine.d.ts",
+		"C:\\vs\\toolchainnew\\EnderStorage\\declarations\\RenderUtil.d.ts",
+		"C:\\vs\\toolchainnew\\toolchain\\toolchain\\declarations\\wopaapi.d.ts",
+		"C:\\vs\\toolchainnew\\toolchain\\toolchain\\declarations\\aaadapted-script.d.ts",
+		"C:\\vs\\toolchainnew\\toolchain\\toolchain\\declarations\\preloader.d.ts",
+		"C:\\vs\\toolchainnew\\EnderStorage\\declarations\\StorageInterface.d.ts",
+		"C:\\vs\\toolchainnew\\toolchain\\toolchain\\declarations\\adapted-script.d.ts",
+		"C:\\vs\\toolchainnew\\EnderStorage\\declarations\\VanillaSlots.d.ts"
+	]
+}

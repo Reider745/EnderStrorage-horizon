@@ -1,0 +1,16 @@
+{
+	"extends": "..\\tsconfig.json",
+	"compilerOptions": {
+		"outFile": "C:\\vs\\toolchainnew\\toolchain\\toolchain\\build\\EnderStorage-4b6c9\\sources\\main.js"
+	},
+	"exclude": [],
+	"include": [
+		"header.ts",
+		"block/models/chest_0.js",
+		"block/models/chest_1.js",
+		"block/models/chest_2.js",
+		"block/models/chest_3.js",
+		"block/TileBase.ts",
+		"block/Chest.ts"
+	]
+}
