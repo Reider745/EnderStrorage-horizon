@@ -108,7 +108,6 @@ var EnderTileBase = /** @class */ (function (_super) {
         this.updateModel();
     };
     EnderTileBase.prototype.getScreenName = function (player, coords) {
-        alert("getScreenName " + this.container.getClientContainerTypeName());
         return "main";
     };
     EnderTileBase.prototype.destroy = function () {
